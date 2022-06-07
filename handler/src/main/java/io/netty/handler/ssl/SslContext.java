@@ -827,12 +827,14 @@ public abstract class SslContext {
                         sessionTimeout, keyStoreType);
             case OPENSSL:
                 verifyNullSslContextProvider(provider, sslContextProvider);
+                OpenSsl.ensureAvailability();
                 return new OpenSslClientContext(
                         trustCert, trustManagerFactory, keyCertChain, key, keyPassword,
                         keyManagerFactory, ciphers, cipherFilter, apn, protocols, sessionCacheSize, sessionTimeout,
                         enableOcsp, keyStoreType, options);
             case OPENSSL_REFCNT:
                 verifyNullSslContextProvider(provider, sslContextProvider);
+                OpenSsl.ensureAvailability();
                 return new ReferenceCountedOpenSslClientContext(
                         trustCert, trustManagerFactory, keyCertChain, key, keyPassword,
                         keyManagerFactory, ciphers, cipherFilter, apn, protocols, sessionCacheSize, sessionTimeout,
@@ -895,12 +897,16 @@ public abstract class SslContext {
     /**
      * Returns the size of the cache used for storing SSL session objects.
      */
-    public abstract long sessionCacheSize();
+    public long sessionCacheSize() {
+        return sessionContext().getSessionCacheSize();
+    }
 
     /**
      * Returns the timeout for the cached SSL session objects, in seconds.
      */
-    public abstract long sessionTimeout();
+    public long sessionTimeout() {
+        return sessionContext().getSessionTimeout();
+    }
 
     /**
      * @deprecated Use {@link #applicationProtocolNegotiator()} instead.

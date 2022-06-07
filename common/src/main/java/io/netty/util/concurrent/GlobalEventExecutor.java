@@ -20,6 +20,8 @@ import io.netty.util.internal.ThreadExecutorMap;
 import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.InternalLoggerFactory;
 
+import org.jetbrains.annotations.Async.Schedule;
+
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Queue;
@@ -125,9 +127,6 @@ public final class GlobalEventExecutor extends AbstractScheduledEventExecutor im
 
     /**
      * Return the number of tasks that are pending for processing.
-     *
-     * <strong>Be aware that this operation may be expensive as it depends on the internal implementation of the
-     * SingleThreadEventExecutor. So use it was care!</strong>
      */
     public int pendingTasks() {
         return taskQueue.size();
@@ -203,6 +202,10 @@ public final class GlobalEventExecutor extends AbstractScheduledEventExecutor im
 
     @Override
     public void execute(Runnable task) {
+        execute0(task);
+    }
+
+    private void execute0(@Schedule Runnable task) {
         addTask(ObjectUtil.checkNotNull(task, "task"));
         if (!inEventLoop()) {
             startThread();
@@ -240,7 +243,7 @@ public final class GlobalEventExecutor extends AbstractScheduledEventExecutor im
                 Runnable task = takeTask();
                 if (task != null) {
                     try {
-                        task.run();
+                        runTask(task);
                     } catch (Throwable t) {
                         logger.warn("Unexpected exception from the global event executor: ", t);
                     }

@@ -86,6 +86,8 @@ public class ChannelOption<T> extends AbstractConstant<ChannelOption<T>> {
      */
     @Deprecated
     public static final ChannelOption<Integer> MAX_MESSAGES_PER_READ = valueOf("MAX_MESSAGES_PER_READ");
+    public static final ChannelOption<Integer> MAX_MESSAGES_PER_WRITE = valueOf("MAX_MESSAGES_PER_WRITE");
+
     public static final ChannelOption<Integer> WRITE_SPIN_COUNT = valueOf("WRITE_SPIN_COUNT");
     /**
      * @deprecated Use {@link #WRITE_BUFFER_WATER_MARK}
@@ -125,7 +127,15 @@ public class ChannelOption<T> extends AbstractConstant<ChannelOption<T>> {
     public static final ChannelOption<Boolean> IP_MULTICAST_LOOP_DISABLED = valueOf("IP_MULTICAST_LOOP_DISABLED");
 
     public static final ChannelOption<Boolean> TCP_NODELAY = valueOf("TCP_NODELAY");
+    /**
+     * Client-side TCP FastOpen. Sending data with the initial TCP handshake.
+     */
     public static final ChannelOption<Boolean> TCP_FASTOPEN_CONNECT = valueOf("TCP_FASTOPEN_CONNECT");
+
+    /**
+     * Server-side TCP FastOpen. Configures the maximum number of outstanding (waiting to be accepted) TFO connections.
+     */
+    public static final ChannelOption<Integer> TCP_FASTOPEN = valueOf(ChannelOption.class, "TCP_FASTOPEN");
 
     @Deprecated
     public static final ChannelOption<Boolean> DATAGRAM_CHANNEL_ACTIVE_ON_REGISTRATION =
